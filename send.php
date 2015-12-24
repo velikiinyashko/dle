@@ -1,20 +1,20 @@
 ﻿<?php
-	require '/phpmailer/PHPMailerAutoload.php';
+	require '/phpmailer/PHPMailerAutoload.php'; // подключаем библиотеку phpmailer для отправки почты через внешний smtp
 	$buy='<a href="http://dle-news.ru/index.php?do=buy">сайте</a>'; //страница цен DLE
-	$mailto='<a href="mailto:legacy@dle-news.ru">legacy@dle-news.ru</a>'; // майлто ссылка да почту легаси
+	$mailto='<a href="mailto:legacy@dle-news.ru">legacy@dle-news.ru</a>'; // майлто ссылка на почту легаси
 	$fips='<a href="http://www1.fips.ru/Archive/EVM/2015/2015.11.20/DOC/RUNW/000/002/010/612/523/document.pdf">№ 2010612523</a>'; // ссылка на патент
-	$dle='<a href="http://dle-news.ru/index.php">сайте</a>';
+	$dle='<a href="http://dle-news.ru/index.php">сайте</a>'; //ссылка на сайт DLE
 	$time=date('H:i:s'); // устанавливаем формат времени для отчета
 	$dataout=date('d.m.y'); // устанавливаем формат даты для отчета
-	$out='<a href=file_send_mail.csv">результат отправки</a>'; 
-	$maillist=$_FILES['maillist']['tmp_name']; // передаем в переменную загруженный файл
+	$out='<a href=file_send_mail.csv">результат отправки</a>'; // ссылка на собранный csv файл еще в доработке
+	$maillist=$_FILES['maillist']['tmp_name']; // передаем в переменную загруженный файл по темп имени
 	
-$file=fopen($maillist, "r") or die ("Warning!");
+$file=fopen($maillist, "r") or die ("Warning!"); // открываем переданный в переменную файл, в случае не возможности возвращает ошибку
+/* начинаем цыкал по очередной отправки на емаил в переданом файле*/
 for ($i=0; $info=fgetcsv($file, 1000, ";"); $i++) {
 	list($site, $to) = $info;
 
-	$subject="Претензия $site";
-			// текст письма
+	$subject="Претензия $site"; //тема письма
 	$message="<b>Уважаемая хостинг (телекоммуникационная) компания.</b><br>
 	<br>
 	На Ваших серверах, либо в Вашей подсети размещен сайт <b>\"$site\"</b>, нарушающий наши авторские права.<br><br>
@@ -44,26 +44,27 @@ for ($i=0; $info=fgetcsv($file, 1000, ";"); $i++) {
 	Надеемся на понимание.<br>
 	<br>
 	С уважением,<br>
-	Администрация ООО “СофтНьюс Медиа Групп”<br><br>";
+	Администрация ООО “СофтНьюс Медиа Групп”<br><br>"; // текст притензии 
 
-	$mail = new PHPMailer;
+	$mail = new PHPMailer; // обьявляем функцию
 	
-	$mail -> setLanguage('ru');
-	$mail -> isSMTP();
-	$mail -> Host = 'mail.dle-news.ru';
-	$mail -> SMTPAuth = true;
-	$mail -> Username = 'legacy@dle-news.ru';
-	$mail -> Password = 'xjyOUEjz';
-	$mail -> Port = 25;
+	$mail -> setLanguage('ru'); // устанавливаем язык
+	$mail -> isSMTP(); // включаем smtp
+	$mail -> Host = 'mail.dle-news.ru'; // указываем сервер smtp
+	$mail -> SMTPAuth = true; // включаем необходимость авторизации
+	$mail -> Username = 'legacy@dle-news.ru'; // указываем логин для авторизации
+	$mail -> Password = 'xjyOUEjz'; // пароль для авторизации
+	$mail -> Port = 25; // порт smtp сервера
 
-	$mail -> CharSet = 'UTF-8';
-	$mail -> setFrom('legacy@dle-news.ru', 'DataLife Engine');
-	$mail -> addAddress($to);
-	$mail -> addBCC('legacy@dle-news.ru');
-	$mail -> addReplyTo('legacy@dle-news.ru');
-	$mail -> isHTML(true);
-	$mail -> Subject = $subject;
-	$mail -> Body = $message;
+	$mail -> CharSet = 'UTF-8'; // указываем кодировку
+	$mail -> setFrom('legacy@dle-news.ru', 'DataLife Engine'); // заполняем поле "ОТ"
+	$mail -> addAddress($to); // указываем получателя (в данном случае береться переменной из файла с ящиками)
+	$mail -> addBCC('legacy@dle-news.ru'); // указываем кому отправляем скрытую копию (вариант отсутствия возможности положить в папку отправленные)
+	$mail -> addReplyTo('legacy@dle-news.ru'); // указываем адрес для ответа на письмо
+	$mail -> isHTML(true); // включить HTML в тексте письма
+	$mail -> Subject = $subject; // заголовок письма
+	$mail -> Body = $message; // текст письма
+	/* отправляем почту, выводим сообщение об отправки в ином случае показываем ошибку*/
 		if (!$mail -> send()) {
 			echo "Message is not send <br>";
 			echo "Mailer error:" . $mail -> ErrorInfo . "<br>";
@@ -71,4 +72,5 @@ for ($i=0; $info=fgetcsv($file, 1000, ";"); $i++) {
 			echo "Message is send $to <br>";
 		}
 }
+fclose($maillist);
 ?>
