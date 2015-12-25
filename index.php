@@ -10,7 +10,7 @@
 			settings,
 			settings)
 	</script>-->
-	<form enctype="multipart/form-data" action="parse.php" method="POST">
+	<form enctype="multipart/form-data" action="info.php" method="POST">
 		<input type="hidden" name="MAX_FILE_SIZE" value="600000"/>
 		Загрузите *.csv для отправки на русском языке: <input name="maillist" type="file"/>
 		<input type="submit" value="Отправить"/>
