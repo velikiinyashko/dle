@@ -1,9 +1,11 @@
 ﻿<?php
 	require '/phplib/phpmailer/PHPMailerAutoload.php'; // подключаем библиотеку phpmailer для отправки почты через внешний smtp
 	$buy='<a href="http://dle-news.ru/index.php?do=buy">сайте</a>'; //страница цен DLE
+	$dle='<a href="http://dle-news.ru/index.php">сайте</a>'; //ссылка на сайт DLE
+	$buyen='<a href="http://dle-news.ru/index.php?do=buy">site</a>'; //страница цен DLE для английского текста
+	$dleen='<a href="http://dle-news.ru/index.php">site</a>'; //ссылка на сайт DLE для английского текста
 	$mailto='<a href="mailto:legacy@dle-news.ru">legacy@dle-news.ru</a>'; // майлто ссылка на почту легаси
 	$fips='<a href="http://www1.fips.ru/Archive/EVM/2015/2015.11.20/DOC/RUNW/000/002/010/612/523/document.pdf">№ 2010612523</a>'; // ссылка на патент
-	$dle='<a href="http://dle-news.ru/index.php">сайте</a>'; //ссылка на сайт DLE
 	$time=date('H:i:s'); // устанавливаем формат времени для отчета
 	$dataout=date('d.m.y'); // устанавливаем формат даты для отчета
 	$out='<a href=file_send_mail.csv">результат отправки</a>'; // ссылка на собранный csv файл еще в доработке
@@ -66,8 +68,8 @@ for ($i=0; $info=fgetcsv($file, 1000, ";"); $i++) {
 	Your site is based on a computer program «DataLife Engine». Maybe you do not know, but this program is copyrighted and protected by Russian and international legislation, registered as an object of intellectual property Federal Service for Intellectual Property, Patents and Trademarks under $fips in the registry of the computer programs April 12, 2010 Exclusive rights to the Software belong to LLC \"SoftNyus Media Group,\" according to the notice on state registration of the alienation of the exclusive right (№ RD0183156 from 04.10.2015).
 	In connection with the amendments of 01/05/2015 which entered the Federal Law № 149-FZ \"On information, information technologies and information protection\" we have the right to go to court to block your site because of illegal use of computer programs (the use of unlicensed software version) .
 	Based on this, we invite you to resolve this situation in the pre-trial order with minimal cost on your part.
-	Based on this, we ask you to stop infringement of intellectual property rights, namely, use licensed version of the computer software program «DataLife Engine». To do this you need to pay a license on our $buy , which costs 3990 rub.
-	After payment, please, inform us on e-mail: legacy@dle-news.ru that you have purchased a license for the Program, specifying the domain and account on $dle for which you purchased the Program. It is necessary to remove your address from the database of illegal copies.
+	Based on this, we ask you to stop infringement of intellectual property rights, namely, use licensed version of the computer software program «DataLife Engine». To do this you need to pay a license on our $buyen , which costs 3990 rub.
+	After payment, please, inform us on e-mail: $mailto that you have purchased a license for the Program, specifying the domain and account on $dleen for which you purchased the Program. It is necessary to remove your address from the database of illegal copies.
 	We hope for your understanding and stop of copyright infringement.
 	Also, the use of illegal copies of our programs can pose a substantial threat to the security of your site and lead to unauthorized access to your site and its malicious user since very often in the distribution downloaded is not officially intruders entered various backdoor, allowing to carry out unauthorized access to the site.
 	Otherwise, discharging is distributed by fourteen (14) days, we're going to stop the illegal use of your computer programs «DataLife Engine» and for this we will:
@@ -103,8 +105,10 @@ for ($i=0; $info=fgetcsv($file, 1000, ";"); $i++) {
 		if (!$mail -> send()) {
 			echo "Message is not send <br>";
 			echo "Mailer error:" . $mail -> ErrorInfo . "<br>";
+			sleep(2);
 		} else {
 			echo "Message is send $to <br>";
+			sleep(2);
 		}
 }
 fclose($maillist);

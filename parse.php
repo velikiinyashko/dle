@@ -9,14 +9,14 @@ for ($i=0; $info=fgetcsv($file, 1000, ";"); $i++) {
 	$ipadd = preg_match('/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/', $adminmail[0], $ip);
 	$abuse = file('http://2whois.ru/?t=whois&data='.$ip[0]);
 		for ($i=200; $i < 300; $i++) { 
-			$mail = preg_match('/([a-z0-9_\.\-])+\@(([a-z0-9\-])+\.)+([a-z0-9]{2,4})+/i', $abuse[$i], $mailto);
+			$mail = preg_match('/([a-z0-9_\.\-]{0,10}[abuse]{5}[a-z0-9_\.\-]{0,10})[@]([a-z0-9_\-\.]{1,15}[a-z0-9]{2,6})+\.([a-z]{2,6})/', $abuse[$i], $mailto); //([a-z0-9_\.\-])+\@(([a-z0-9\-])+\.)+([a-z0-9]{2,4})+/i
 				if (empty($mail)) {
 				} else {
 					fputcsv($outfile, array($site,$mailto[0]), ";");
 				}
 		}
 	
-	sleep(3);
+	sleep(5);
 }
 fclose($file);
 fclose($outfile);
